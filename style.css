@@ -18,14 +18,13 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 750px; /* Justerad för perfekt symmetri mellan video och kort */
     margin: 0 auto;
     padding: 0 20px;
 }
 
 nav { padding: 40px 0; text-align: center; }
 
-/* LOGO - Large and prominent */
 .nav-logo { 
     height: 120px; 
     width: auto; 
@@ -43,12 +42,12 @@ h1 { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom
 
 .subtitle { font-size: 1.15rem; color: var(--text-dim); max-width: 550px; margin: 0 auto 40px; }
 
-/* VIDEO - Balanced size */
+/* VIDEO - Nu perfekt matchad med containern */
 .video-wrapper {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     padding: 2px;
     border-radius: 20px;
-    max-width: 650px; /* Reduced width for better layout */
+    width: 100%;
     margin: 0 auto;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
@@ -56,14 +55,17 @@ h1 { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom
 .video-container {
     background: #000;
     border-radius: 18px;
-    aspect-ratio: 16 / 9;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
 
-.video-placeholder { color: var(--text-dim); font-weight: 600; letter-spacing: 2px; font-size: 0.8rem; }
+video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
 
 .glass-card {
     background: var(--card-bg);
@@ -73,11 +75,11 @@ h1 { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom
     border-radius: 30px;
     margin-top: 40px;
     text-align: center;
+    width: 100%;
 }
 
 .glass-card h2 { font-size: 2rem; margin-bottom: 10px; }
 
-/* CTA Button */
 .buy-button {
     display: inline-block;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -104,4 +106,5 @@ footer a { color: var(--primary); text-decoration: none; }
     h1 { font-size: 2.2rem; }
     .nav-logo { height: 80px; }
     .buy-button { width: 100%; padding: 18px 20px; }
+    .glass-card { padding: 30px 20px; }
 }
