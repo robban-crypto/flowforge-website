@@ -18,7 +18,7 @@ body {
 }
 
 .container {
-    max-width: 750px; /* Justerad för perfekt symmetri mellan video och kort */
+    max-width: 750px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -42,7 +42,6 @@ h1 { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom
 
 .subtitle { font-size: 1.15rem; color: var(--text-dim); max-width: 550px; margin: 0 auto 40px; }
 
-/* VIDEO - Nu perfekt matchad med containern */
 .video-wrapper {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     padding: 2px;
@@ -99,12 +98,17 @@ video {
     box-shadow: 0 20px 40px rgba(139, 92, 246, 0.5);
 }
 
-footer { padding: 80px 0; text-align: center; color: var(--text-dim); font-size: 0.9rem; }
-footer a { color: var(--primary); text-decoration: none; }
+/* FOOTER UPDATES */
+footer { padding: 80px 0; text-align: center; color: var(--text-dim); font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px; }
+.footer-links { display: flex; justify-content: center; gap: 25px; margin-top: 15px; align-items: center; }
+.footer-link { color: var(--text-dim); text-decoration: none; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+.footer-link:hover { color: var(--primary); }
+.x-link svg { fill: currentColor; }
 
 @media (max-width: 768px) {
     h1 { font-size: 2.2rem; }
     .nav-logo { height: 80px; }
     .buy-button { width: 100%; padding: 18px 20px; }
     .glass-card { padding: 30px 20px; }
+    .footer-links { flex-direction: column; gap: 15px; }
 }
