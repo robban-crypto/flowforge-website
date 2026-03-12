@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForgeSocial – AI Social Media Toolkit | FlowForge AI</title>
+  <meta name="description" content="Turn one idea into threads, hooks, captions, and newsletters in seconds. ForgeSocial is the AI-powered social media toolkit for solopreneurs.">
+  <meta property="og:title" content="ForgeSocial – AI Social Media Toolkit">
+  <meta property="og:description" content="Put your social media on autopilot. One idea. Endless content.">
+  <meta property="og:image" content="https://www.flowforgeai.app/hero.png">
+  <link rel="canonical" href="https://www.flowforgeai.app/forgesocial/">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #0d1117;
+      --bg-2:      #161b22;
+      --card-bg:   #1a1f2e;
+      --border:    rgba(99,102,241,0.2);
+      --border-h:  rgba(99,102,241,0.5);
+      --text:      #ffffff;
+      --text-dim:  #9ca3af;
+      --accent:    #6366f1;
+      --accent-2:  #8b5cf6;
+      --gradient:  linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo img { height: 44px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--gradient);
+      color: #fff !important;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: opacity 0.2s, transform 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; }
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(13,17,23,0.98);
+      padding: 20px 32px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-nav a:last-child { border-bottom: none; }
+
+    /* ─── SHARED ─── */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    section { position: relative; z-index: 1; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6366f1;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .section-sub { color: var(--text-dim); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gradient);
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(99,102,241,0.45); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--border-h); background: rgba(99,102,241,0.06); }
+
+    .actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 140px 32px 100px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 780px; margin: 0 auto; position: relative; z-index: 2; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #a5b4fc;
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto 44px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero .actions { justify-content: center; }
+
+    /* price pill */
+    .price-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(99,102,241,0.08);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 10px 20px;
+      margin-top: 32px;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+    .price-pill strong { color: var(--text); font-size: 1.2rem; font-family: 'Syne', sans-serif; }
+
+    /* ─── HERO IMAGE ─── */
+    .hero-visual {
+      padding: 0 32px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-visual-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: var(--gradient);
+      padding: 2px;
+      border-radius: 20px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+    .hero-visual-inner img {
+      width: 100%;
+      border-radius: 18px;
+      display: block;
+    }
+
+    /* ─── VIDEO ─── */
+    .video-section { padding: 80px 0; border-top: 1px solid var(--border); }
+    .video-header { text-align: center; margin-bottom: 48px; }
+    .video-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--gradient);
+      padding: 2px;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+    .video-wrap video { width: 100%; border-radius: 18px; background: #000; display: block; }
+    .video-note { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 16px; opacity: 0.7; }
+
+    /* ─── WHAT IT DOES ─── */
+    .features { padding: 100px 0; border-top: 1px solid var(--border); }
+    .features-header { margin-bottom: 56px; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+    .feature-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .feature-card p { color: var(--text-dim); font-size: 0.92rem; line-height: 1.65; }
+
+    /* ─── WHO IT'S FOR ─── */
+    .audience { padding: 100px 0; border-top: 1px solid var(--border); }
+    .audience-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .audience-list { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+    .audience-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+    .audience-list li::before {
+      content: '✓';
+      width: 22px;
+      height: 22px;
+      background: rgba(99,102,241,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      color: #6366f1;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+    .audience-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 44px;
+      text-align: center;
+    }
+    .audience-stat {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .audience-stat-label { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 32px; display: block; }
+
+    /* ─── HOW IT WORKS ─── */
+    .how { padding: 100px 0; border-top: 1px solid var(--border); }
+    .how-header { text-align: center; margin-bottom: 64px; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: calc(16.66% + 16px);
+      right: calc(16.66% + 16px);
+      height: 1px;
+      background: var(--border);
+    }
+    .step { text-align: center; }
+    .step-number {
+      width: 64px;
+      height: 64px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .step h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.65; }
+
+    /* ─── PRICING ─── */
+    .pricing { padding: 100px 0; border-top: 1px solid var(--border); }
+    .pricing-header { text-align: center; margin-bottom: 56px; }
+    .pricing-card {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border-h);
+      border-radius: 28px;
+      padding: 56px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient);
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #a5b4fc;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+    .pricing-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .pricing-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 36px; display: block; }
+    .pricing-includes {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .pricing-includes li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+    .pricing-includes li::before {
+      content: '✓';
+      width: 22px;
+      height: 22px;
+      background: rgba(99,102,241,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      color: #6366f1;
+      font-weight: 700;
+    }
+    .pricing-card .btn-primary { width: 100%; justify-content: center; font-size: 1.05rem; padding: 18px; }
+
+    /* ─── FAQ ─── */
+    .faq { padding: 100px 0; border-top: 1px solid var(--border); }
+    .faq-header { text-align: center; margin-bottom: 56px; }
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      padding: 22px 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .faq-q svg { flex-shrink: 0; transition: transform 0.3s; }
+    .faq-item.open .faq-q svg { transform: rotate(180deg); }
+    .faq-a {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      padding: 0 24px 22px;
+      display: none;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta { padding: 100px 0; border-top: 1px solid var(--border); }
+    .final-cta-inner {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 80px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta-inner::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .final-cta-inner h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .final-cta-inner p {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      margin-bottom: 44px;
+      position: relative;
+      z-index: 1;
+    }
+    .final-cta-inner .actions { justify-content: center; position: relative; z-index: 1; }
+
+    /* ─── FOOTER ─── */
+    footer { border-top: 1px solid var(--border); padding: 48px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-logo img { height: 36px; opacity: 0.8; }
+    .footer-copy { color: var(--text-dim); font-size: 0.85rem; }
+    .footer-links { display: flex; align-items: center; gap: 24px; }
+    .footer-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── BILLING TOGGLE ─── */
+    .billing-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin: 32px auto 40px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px;
+      width: fit-content;
+    }
+    .billing-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 9px 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .billing-btn.active { background: var(--gradient); color: #fff; }
+
+    /* ─── PRICING GRID ─── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-card--featured {
+      border-color: var(--border-h);
+      box-shadow: 0 0 40px rgba(99,102,241,0.1);
+    }
+    .pricing-card--featured::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient);
+    }
+    .pricing-badge { display: inline-block; background: rgba(99,102,241,0.12); border: 1px solid var(--border); border-radius: 50px; padding: 6px 16px; font-size: 0.75rem; font-weight: 600; color: #a5b4fc; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; width: fit-content; }
+    .pricing-amount { font-family: 'Syne', sans-serif; font-size: 3.2rem; font-weight: 800; display: block; margin-bottom: 4px; }
+    .pricing-sub { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; display: block; }
+    .pricing-includes { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .pricing-includes li { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+    .pricing-includes li::before { content: '✓'; width: 20px; height: 20px; background: rgba(99,102,241,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.65rem; color: #6366f1; font-weight: 700; }
+    .pricing-note { text-align: center; color: var(--text-dim); font-size: 0.82rem; margin-top: 20px; max-width: 820px; margin-left: auto; margin-right: auto; }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .audience-inner { grid-template-columns: 1fr; gap: 36px; }
+      .steps { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 110px 20px 60px; }
+      .wrap { padding: 0 20px; }
+      .hero-visual { padding: 0 20px 60px; }
+      .features, .audience, .how, .pricing, .faq, .final-cta, .video-section { padding: 72px 0; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+      .pricing-card { padding: 32px 24px; }
+      .final-cta-inner { padding: 48px 28px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><img src="../img/logo.png" alt="FlowForge AI"></a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="mailto:robban@flowforgeai.app">Contact</a></li>
+        <li><a href="https://flowforgeauto.gumroad.com/l/xhwblw" class="nav-cta" target="_blank">Buy Now</a></li>
+      </ul>
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="/">Home</a>
+      <a href="mailto:robban@flowforgeai.app">Contact</a>
+      <a href="https://flowforgeauto.gumroad.com/l/xhwblw" target="_blank">Buy Now →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner fade-up">
+      <div class="hero-badge">AI Social Media Toolkit</div>
+      <h1><em>ForgeSocial</em></h1>
+      <p>Turn one idea into threads, hooks, captions, and newsletters — in seconds. Put your social media on autopilot.</p>
+      <div class="actions">
+        <a href="https://flowforgeauto.gumroad.com/l/xhwblw" class="btn-primary" target="_blank">
+          Get ForgeSocial Now
+        </a>
+      </div>
+      <div class="price-pill">From <strong>$15/month</strong> &nbsp;·&nbsp; Save more on quarterly &amp; annual plans</div>
+    </div>
+  </header>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-visual fade-up">
+    <div class="hero-visual-inner">
+      <img src="../img/hero.png" alt="ForgeSocial – AI Social Media Toolkit">
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <section class="video-section">
+    <div class="wrap">
+      <div class="video-header fade-up">
+        <div class="section-label">See It In Action</div>
+        <h2 class="section-title">Watch ForgeSocial work</h2>
+      </div>
+      <div class="video-wrap fade-up">
+        <video controls playsinline>
+          <source src="../vid/ForgeSocial.mp4" type="video/mp4">
+        </video>
+      </div>
+      <p class="video-note fade-up">This demo shows v1.0 of ForgeSocial. The current version may look slightly different.</p>
+    </div>
+  </section>
+
+  <!-- WHAT IT DOES -->
+  <section class="features">
+    <div class="wrap">
+      <div class="features-header fade-up">
+        <div class="section-label">What It Does</div>
+        <h2 class="section-title">Four tools. One toolkit.</h2>
+        <p class="section-sub">Everything you need to turn any piece of content into a full week of social media — without the grind.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fade-up">
+          <div class="feature-icon">♻️</div>
+          <h3>Content Repurposer</h3>
+          <p>Paste any content — a blog post, podcast transcript, or idea — and get it instantly reformatted for every platform. Stop writing the same thing four times.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🎣</div>
+          <h3>Hook Generator</h3>
+          <p>The first line is everything. Generate powerful, scroll-stopping hooks that pull readers in before they even think about scrolling past.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🧵</div>
+          <h3>Thread Writer</h3>
+          <p>Turn any idea into a structured, engaging X/Twitter thread. The AI handles the flow, the hooks, and the punchline — you just hit post.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">📧</div>
+          <h3>Newsletter Drafter</h3>
+          <p>Your content, turned into a ready-to-send newsletter draft. Keeps your voice, saves your time, and keeps your list engaged.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IT'S FOR -->
+  <section class="audience">
+    <div class="wrap">
+      <div class="audience-inner">
+        <div class="fade-up">
+          <div class="section-label">Who It's For</div>
+          <h2 class="section-title">Made for people who create</h2>
+          <p class="section-sub">You've got things to say. ForgeSocial makes sure more people hear them — without doubling your workload.</p>
+          <ul class="audience-list">
+            <li>Solopreneurs who post consistently but don't have a content team</li>
+            <li>Creators who want to repurpose content without copy-pasting and rewriting</li>
+            <li>Small business owners who know they should be on social, but run out of time</li>
+            <li>Anyone who's stared at a blank screen and given up for the day</li>
+          </ul>
+        </div>
+        <div class="audience-card fade-up">
+          <span class="audience-stat">4×</span>
+          <span class="audience-stat-label">more content from every idea</span>
+          <span class="audience-stat" style="font-size:2.5rem;">10×</span>
+          <span class="audience-stat-label">faster than writing from scratch</span>
+          <span class="audience-stat" style="font-size:2rem;">∞</span>
+          <span class="audience-stat-label" style="margin-bottom: 0;">runs in your browser, any time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="wrap">
+      <div class="how-header fade-up">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Three steps. Done.</h2>
+      </div>
+      <div class="steps">
+        <div class="step fade-up">
+          <div class="step-number">1</div>
+          <h3>Paste your content</h3>
+          <p>Drop in your raw idea, blog draft, or any existing piece of content into the toolkit.</p>
+        </div>
+        <div class="step fade-up">
+          <div class="step-number">2</div>
+          <h3>Choose your tool</h3>
+          <p>Pick from Repurpose, Hooks, Thread Writer, or Newsletter depending on what you need.</p>
+        </div>
+        <div class="step fade-up">
+          <div class="step-number">3</div>
+          <h3>Copy and post</h3>
+          <p>Your AI-generated content is ready. Copy it, tweak if you want, and get it out into the world.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing">
+    <div class="wrap">
+      <div class="pricing-header fade-up">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Pick your plan.</h2>
+        <p class="section-sub" style="margin: 0 auto; text-align:center;">Save more when you commit quarterly or annually.</p>
+      </div>
+
+      <div class="billing-toggle fade-up">
+        <button class="billing-btn active" onclick="setBilling('monthly', this)">Monthly</button>
+        <button class="billing-btn" onclick="setBilling('quarterly', this)">Quarterly</button>
+        <button class="billing-btn" onclick="setBilling('annual', this)">Annual</button>
+      </div>
+
+      <div class="pricing-grid fade-up">
+        <div class="pricing-card">
+          <div class="pricing-badge">Standard</div>
+          <span class="pricing-amount" id="price-standard">$15</span>
+          <span class="pricing-sub" id="sub-standard">/month &middot; billed monthly</span>
+          <p style="color:var(--text-dim);font-size:0.88rem;margin-bottom:28px;">1,000 executions per month</p>
+          <ul class="pricing-includes">
+            <li>All four tools included</li>
+            <li>Content Repurposer</li>
+            <li>Hook Generator</li>
+            <li>Thread Writer</li>
+            <li>Newsletter Drafter</li>
+            <li>API key included with subscription</li>
+          </ul>
+          <a href="https://flowforgeauto.gumroad.com/l/xhwblw" class="btn-secondary" target="_blank" style="justify-content:center;width:100%;">Get Standard</a>
+        </div>
+
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-badge">Premium</div>
+          <span class="pricing-amount" id="price-premium">$29</span>
+          <span class="pricing-sub" id="sub-premium">/month &middot; billed monthly</span>
+          <p style="color:var(--text-dim);font-size:0.88rem;margin-bottom:28px;">2,500 executions per month</p>
+          <ul class="pricing-includes">
+            <li>Everything in Standard</li>
+            <li>2.5&times; more executions</li>
+            <li>Priority support</li>
+            <li>Early access to new tools</li>
+            <li>API key included with subscription</li>
+          </ul>
+          <a href="https://flowforgeauto.gumroad.com/l/xhwblw" class="btn-primary" target="_blank" style="justify-content:center;width:100%;">Get Premium</a>
+        </div>
+      </div>
+      <p class="pricing-note fade-up">All plans via Gumroad. Cancel anytime.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="wrap">
+      <div class="faq-header fade-up">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">Questions answered</h2>
+      </div>
+      <div class="faq-list fade-up">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Do I need my own OpenAI API key?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">No. Your API key is included with your subscription. When you sign up you'll receive a key that gives you access to the app. Your executions are managed through that key, which is how we keep track of your plan limits.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Where does ForgeSocial run?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">ForgeSocial runs as a hosted web tool at flowforgeai.app/forgesocial/app/ — no installation required. It works in your browser on any device.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is this a subscription?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Yes — ForgeSocial is a subscription. You choose Standard ($15/month, 1,000 executions) or Premium ($29/month, 2,500 executions). You can save more by paying quarterly or annually. Cancel anytime.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What platforms does it create content for?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">ForgeSocial creates content for X/Twitter (including threads), LinkedIn, newsletters, and general social captions. More formats are being added over time.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How do I get access after purchasing?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">After purchase via Gumroad you'll receive an email with your access link and instructions. You'll be up and running in minutes.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I get a refund?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">If ForgeSocial doesn't work as described, reach out to robban@flowforgeai.app and we'll sort it out. We stand behind what we build.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="wrap">
+      <div class="final-cta-inner fade-up">
+        <h2>Stop staring at a blank screen.</h2>
+        <p>Get ForgeSocial and turn one idea into a week of content — starting today.</p>
+        <div class="actions">
+          <a href="https://flowforgeauto.gumroad.com/l/xhwblw" class="btn-primary" target="_blank">Get ForgeSocial — from $15/month</a>
+          <a href="app/" class="btn-secondary">Try the App First →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-logo"><img src="../img/logo.png" alt="FlowForge AI"></div>
+        <p class="footer-copy">© 2026 FlowForge AI. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="mailto:robban@flowforgeai.app">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            robban@flowforgeai.app
+          </a>
+          <a href="https://x.com/RobbanA16805" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X
+          </a>
+          <a href="https://tiktok.com/@flowforgeai.app" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.68V17c0 .86-.02 1.2-.4 1.53-.35.3-.92.45-1.72.45-.5 0-1-.1-1.42-.33-.6-.3-1-.93-1-1.66 0-.67.4-1.28 1-1.6.43-.24 1.12-.35 2-.32V12.5c-2.43 0-4.34.6-5.63 1.83-1.28 1.22-1.92 2.92-1.92 5.1s.64 3.88 1.92 5.1c1.28 1.22 3.2 1.83 5.72 1.83 2.53 0 4.45-.6 5.73-1.83 1.28-1.22 1.92-2.92 1.92-5.1V7.12C20.1 8.12 21.6 8.8 23.33 8.8v-2.5c-1.5 0-2.8-.5-3.83-1.37-1.1-.92-1.87-2.35-1.87-4.25H12.53z"/></svg>
+            TikTok
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+    function toggleFaq(btn) {
+      btn.parentElement.classList.toggle('open');
+    }
+
+    // Billing toggle
+    const prices = {
+      monthly:   { standard: '$15', premium: '$29', subStandard: '/month · billed monthly',          subPremium: '/month · billed monthly' },
+      quarterly: { standard: '$38', premium: '$74', subStandard: '/quarter · billed quarterly',      subPremium: '/quarter · billed quarterly' },
+      annual:    { standard: '$130', premium: '$150', subStandard: '/year · billed annually · Save $50', subPremium: '/year · billed annually · Save $98' }
+    };
+
+    function setBilling(period, btn) {
+      document.querySelectorAll('.billing-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const p = prices[period];
+      document.getElementById('price-standard').textContent = p.standard;
+      document.getElementById('price-premium').textContent  = p.premium;
+      document.getElementById('sub-standard').textContent   = p.subStandard;
+      document.getElementById('sub-premium').textContent    = p.subPremium;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) el.classList.add('visible');
+      });
+    });
+  </script>
+</body>
+</html>
