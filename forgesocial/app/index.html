@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForgeSocial App – FlowForge AI</title>
+  <meta name="description" content="ForgeSocial AI Social Media Toolkit – generate hooks, threads, newsletters and repurposed content instantly.">
+  <link rel="canonical" href="https://www.flowforgeai.app/forgesocial/app/">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0d1117;
+      --bg-2:      #161b22;
+      --card-bg:   #1a1f2e;
+      --border:    rgba(99,102,241,0.2);
+      --border-h:  rgba(99,102,241,0.5);
+      --text:      #ffffff;
+      --text-dim:  #9ca3af;
+      --accent:    #6366f1;
+      --accent-2:  #8b5cf6;
+      --gradient:  linear-gradient(135deg, #6366f1, #8b5cf6);
+      --input-bg:  #0d1117;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 28px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-logo-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .nav-logo-label span { font-size: 0.7rem; font-weight: 400; color: var(--text-dim); font-family: 'DM Sans', sans-serif; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-back {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-buy {
+      background: var(--gradient);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .nav-buy:hover { opacity: 0.85; }
+
+    /* ─── MAIN LAYOUT ─── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 92px 28px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── APP HEADER ─── */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .app-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .app-title em {
+      font-style: normal;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .app-subtitle { color: var(--text-dim); font-size: 0.9rem; margin-top: 4px; }
+
+    /* ─── HERO IMAGE (small) ─── */
+    .app-hero-img {
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 28px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .app-hero-img img { width: 100%; display: block; border-radius: 14px; }
+
+    /* ─── APP CARD ─── */
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* ─── API KEY BAR ─── */
+    .api-bar {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .api-bar label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .api-bar input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .api-bar input:focus { border-color: var(--border-h); }
+    .api-bar input::placeholder { color: var(--text-dim); }
+    .api-hint {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+    .api-hint a { color: var(--accent); text-decoration: none; }
+
+    /* ─── TOOL TABS ─── */
+    .tool-tabs {
+      display: flex;
+      padding: 20px 28px 0;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .tool-tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      padding: 10px 20px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-tab:hover { color: var(--text); }
+    .tool-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+    .tool-tab-icon { font-size: 1rem; }
+
+    /* ─── TOOL DESCRIPTION ─── */
+    .tool-desc {
+      padding: 20px 28px;
+      background: rgba(99,102,241,0.04);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      display: none;
+    }
+    .tool-desc.active { display: block; }
+
+    /* ─── WORKSPACE ─── */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+
+    /* INPUT PANEL */
+    .input-panel {
+      padding: 28px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .panel-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+    .input-panel textarea {
+      flex: 1;
+      width: 100%;
+      min-height: 280px;
+      padding: 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-panel textarea:focus { border-color: var(--border-h); }
+    .input-panel textarea::placeholder { color: var(--text-dim); }
+
+    .generate-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gradient);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .generate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .generate-btn:active { transform: translateY(0); }
+    .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* OUTPUT PANEL */
+    .output-panel {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .output-actions { display: flex; gap: 8px; }
+    .action-btn {
+      padding: 7px 16px;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn:hover { background: rgba(99,102,241,0.18); color: var(--text); border-color: var(--border-h); }
+    .action-btn.copied { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+
+    .result-area {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 280px;
+      overflow-y: auto;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .result-placeholder {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 12px;
+      text-align: center;
+      min-height: 200px;
+    }
+    .result-placeholder-icon { font-size: 2.5rem; opacity: 0.5; }
+
+    /* Result markdown styles */
+    .result-area h3 {
+      color: #a5b4fc;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 24px 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-area h3:first-child { margin-top: 0; }
+    .result-area p { margin-bottom: 14px; white-space: pre-wrap; }
+    .result-area strong { color: #c4b5fd; }
+    .result-area hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+    .credits-box {
+      background: rgba(99,102,241,0.08);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-top: 20px;
+    }
+
+    /* Loader */
+    .loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+    .loader-inner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(99,102,241,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── FOOTER ─── */
+    .app-footer {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .app-footer p { color: var(--text-dim); font-size: 0.82rem; }
+    .app-footer a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+    .app-footer a:hover { color: var(--accent); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      main { padding: 84px 16px 48px; }
+      .workspace { grid-template-columns: 1fr; }
+      .input-panel { border-right: none; border-bottom: 1px solid var(--border); }
+      .api-bar { padding: 16px 20px; }
+      .tool-tabs { padding: 16px 20px 0; }
+      .input-panel, .output-panel { padding: 20px; }
+      .nav-inner { padding: 0 20px; }
+      .nav-buy { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="../../img/logo.png" alt="FlowForge AI">
+        <div class="nav-logo-label">
+          ForgeSocial
+          <span>by FlowForge AI</span>
+        </div>
+      </a>
+      <div class="nav-right">
+        <a href="../" class="nav-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </a>
+        <a href="https://flowforgeauto.gumroad.com/l/xhwblw" class="nav-buy" target="_blank">Buy Access</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- HERO IMAGE -->
+    <div class="app-hero-img">
+      <img src="../../img/hero.png" alt="ForgeSocial – AI Social Media Toolkit">
+    </div>
+
+    <!-- APP HEADER -->
+    <div class="app-header">
+      <div>
+        <div class="app-title">AI Social Media <em>Toolkit</em></div>
+        <div class="app-subtitle">Paste your content. Choose a tool. Get results in seconds.</div>
+      </div>
+    </div>
+
+    <!-- APP CARD -->
+    <div class="app-card">
+
+      <!-- API KEY -->
+      <div class="api-bar">
+        <label for="apikey">API Key</label>
+        <input type="password" id="apikey" placeholder="sk-...  Enter your OpenAI API key">
+        <span class="api-hint">Need a key? <a href="https://platform.openai.com/api-keys" target="_blank">Get one here →</a></span>
+      </div>
+
+      <!-- TOOL TABS -->
+      <div class="tool-tabs">
+        <button class="tool-tab active" onclick="setTool('repurpose', this)">
+          <span class="tool-tab-icon">♻️</span> Repurpose
+        </button>
+        <button class="tool-tab" onclick="setTool('hooks', this)">
+          <span class="tool-tab-icon">🎣</span> Hook Generator
+        </button>
+        <button class="tool-tab" onclick="setTool('thread', this)">
+          <span class="tool-tab-icon">🧵</span> Thread Writer
+        </button>
+        <button class="tool-tab" onclick="setTool('newsletter', this)">
+          <span class="tool-tab-icon">📧</span> Newsletter
+        </button>
+      </div>
+
+      <!-- TOOL DESCRIPTIONS -->
+      <div class="tool-desc active" id="desc-repurpose">Paste any content and get it instantly reformatted for X, LinkedIn, and beyond.</div>
+      <div class="tool-desc" id="desc-hooks">Generate scroll-stopping first lines that make people want to keep reading.</div>
+      <div class="tool-desc" id="desc-thread">Turn any idea or article into a structured, engaging X/Twitter thread.</div>
+      <div class="tool-desc" id="desc-newsletter">Draft a newsletter from your raw content — ready to send with minimal editing.</div>
+
+      <!-- WORKSPACE -->
+      <div class="workspace">
+
+        <!-- INPUT -->
+        <div class="input-panel">
+          <div class="panel-label">Your Content</div>
+          <textarea id="content" placeholder="Paste your content here — a blog post, an idea, a transcript, anything..."></textarea>
+          <button class="generate-btn" id="generateBtn" onclick="generate()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Generate Content
+          </button>
+        </div>
+
+        <!-- OUTPUT -->
+        <div class="output-panel">
+          <div class="output-header">
+            <div class="panel-label">Result</div>
+            <div class="output-actions">
+              <button class="action-btn" id="copyBtn" onclick="copyResult()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+              <button class="action-btn" onclick="downloadResult()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download
+              </button>
+            </div>
+          </div>
+          <div class="result-area" id="result">
+            <div class="result-placeholder">
+              <div class="result-placeholder-icon">✨</div>
+              <div>Your generated content will appear here.<br>Enter your API key, paste content, and hit Generate.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="app-footer">
+      <p>© 2026 FlowForge AI</p>
+      <div style="display:flex;gap:20px;">
+        <a href="../">← ForgeSocial</a>
+        <a href="/">FlowForge AI</a>
+        <a href="/cdn-cgi/l/email-protection#aedcc1cccccfc0eec8c2c1d9c8c1dcc9cbcfc780cfdede">Support</a>
+      </div>
+    </div>
+
+  </main>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    let currentTool = 'repurpose';
+
+    function setTool(tool, btn) {
+      currentTool = tool;
+
+      // Update tabs
+      document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update descriptions
+      document.querySelectorAll('.tool-desc').forEach(d => d.classList.remove('active'));
+      document.getElementById('desc-' + tool).classList.add('active');
+    }
+
+    async function generate() {
+      const content = document.getElementById('content').value.trim();
+      const apikey  = document.getElementById('apikey').value.trim();
+      const result  = document.getElementById('result');
+      const btn     = document.getElementById('generateBtn');
+
+      if (!apikey) {
+        result.innerHTML = '<div class="result-placeholder"><div class="result-placeholder-icon">🔑</div><div>Please enter your OpenAI API key above.</div></div>';
+        return;
+      }
+      if (!content) {
+        result.innerHTML = '<div class="result-placeholder"><div class="result-placeholder-icon">📝</div><div>Please paste some content to get started.</div></div>';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<div class="loader-inner" style="width:16px;height:16px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:8px;"></div> Generating...';
+      result.innerHTML = '<div class="loader"><div class="loader-inner"></div></div>';
+
+      try {
+        const response = await fetch('https://api.flowforgeai.app/webhook/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content, tool: currentTool, apikey })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          result.innerHTML = `<div style="color:#f87171;font-size:0.9rem;">Error: ${errorText || 'Something went wrong. Please try again.'}</div>`;
+          return;
+        }
+
+        const data = await response.text();
+        typeWriter(data);
+
+      } catch (err) {
+        result.innerHTML = '<div style="color:#f87171;font-size:0.9rem;">Connection error. Please check your API key and try again.</div>';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Generate Content';
+      }
+    }
+
+    function typeWriter(text) {
+      const result = document.getElementById('result');
+      result.innerHTML = '';
+      result.style.whiteSpace = 'pre-wrap';
+
+      let i = 0;
+      const speed = 2;
+
+      function typing() {
+        if (i < text.length) {
+          result.innerText += text.charAt(i);
+          i++;
+          if (i % 8 === 0) result.scrollTop = result.scrollHeight;
+          setTimeout(typing, speed);
+        } else {
+          const lastIndex = text.lastIndexOf('---');
+          let contentPart = text;
+          let creditsPart = '';
+
+          if (lastIndex !== -1) {
+            contentPart = text.substring(0, lastIndex);
+            creditsPart = text.substring(lastIndex + 3);
+          }
+
+          let finalHTML = marked.parse(contentPart);
+          if (creditsPart.trim()) {
+            finalHTML += `<div class="credits-box">${marked.parse(creditsPart)}</div>`;
+          }
+
+          result.style.whiteSpace = '';
+          result.innerHTML = finalHTML;
+          result.scrollTop = result.scrollHeight;
+        }
+      }
+      typing();
+    }
+
+    function copyResult() {
+      const text = document.getElementById('result').innerText;
+      if (!text || text.includes('will appear here')) return;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function downloadResult() {
+      const text = document.getElementById('result').innerText;
+      if (!text || text.includes('will appear here')) return;
+
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `forgesocial-${currentTool}-${Date.now()}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // Enter key shortcut
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey && docu
