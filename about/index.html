@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About – FlowForge AI</title>
+  <meta name="description" content="FlowForge AI is built by Robert Holgersson — a one-person project turning personal automation tools into products anyone can use.">
+  <meta property="og:title" content="About FlowForge AI">
+  <meta property="og:description" content="Built by a real person solving real problems. FlowForge AI makes AI automation accessible to solopreneurs and small businesses.">
+  <meta property="og:image" content="https://www.flowforgeai.app/img/logo.png">
+  <link rel="canonical" href="https://www.flowforgeai.app/about/">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #0d1117;
+      --bg-2:     #161b22;
+      --card-bg:  #1a1f2e;
+      --border:   rgba(99,102,241,0.2);
+      --border-h: rgba(99,102,241,0.5);
+      --text:     #ffffff;
+      --text-dim: #9ca3af;
+      --accent:   #6366f1;
+      --accent-2: #8b5cf6;
+      --gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── SHARED ─── */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    section { position: relative; z-index: 1; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6366f1;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gradient);
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(99,102,241,0.45); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--border-h); background: rgba(99,102,241,0.06); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 160px 32px 100px;
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+      top: 50%;
+      right: -100px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6366f1;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-intro {
+      font-size: 1.25rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+      font-weight: 300;
+      max-width: 620px;
+    }
+
+    /* ─── FOUNDER ─── */
+    .founder {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .founder-inner {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .founder-left { position: sticky; top: 100px; }
+
+    .founder-avatar {
+      width: 120px;
+      height: 120px;
+      background: var(--gradient);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      box-shadow: 0 16px 48px rgba(99,102,241,0.3);
+    }
+
+    .founder-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .founder-title {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+    }
+
+    .founder-links { display: flex; flex-direction: column; gap: 10px; }
+    .founder-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .founder-link:hover { color: var(--accent); }
+
+    .founder-right { display: flex; flex-direction: column; gap: 48px; }
+
+    .founder-block {}
+    .founder-block-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .founder-block p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+    .founder-block p strong { color: var(--text); font-weight: 500; }
+
+    /* Pull quote */
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 28px;
+      margin: 8px 0;
+    }
+    .pull-quote p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.2rem !important;
+      font-style: italic;
+      color: var(--text) !important;
+      font-weight: 300 !important;
+      line-height: 1.65 !important;
+    }
+
+    /* ─── MISSION ─── */
+    .mission {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .mission-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .mission-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .mission-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+    .mission-card:first-child {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.06));
+      border-color: var(--border-h);
+    }
+
+    .mission-icon { font-size: 2rem; margin-bottom: 20px; display: block; }
+    .mission-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .mission-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.7; }
+
+    /* ─── CTA ─── */
+    .cta { padding: 100px 0; border-top: 1px solid var(--border); }
+    .cta-inner {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 80px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .cta-inner h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+    .cta-inner p { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 40px; position: relative; z-index: 1; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+    /* ─── FOOTER ─── */
+    footer { border-top: 1px solid var(--border); padding: 48px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-logo img { height: 36px; opacity: 0.8; }
+    .footer-copy { color: var(--text-dim); font-size: 0.85rem; }
+    .footer-links { display: flex; align-items: center; gap: 24px; }
+    .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .founder-inner { grid-template-columns: 1fr; gap: 48px; }
+      .founder-left { position: static; }
+      .mission-inner { grid-template-columns: 1fr; }
+      .mission-card:first-child { grid-column: auto; }
+    }
+    @media (max-width: 768px) {
+      .hero { padding: 120px 20px 72px; }
+      .wrap { padding: 0 20px; }
+      .founder, .mission, .cta { padding: 72px 0; }
+      .cta-inner { padding: 48px 28px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <script src="/nav.js"></script>
+
+  <!-- HERO -->
+  <header class="hero fade-up">
+    <span class="hero-label">About FlowForge AI</span>
+    <h1>Built by someone who<br>actually <em>uses this stuff</em></h1>
+    <p class="hero-intro">FlowForge AI isn't a startup with investors and a roadmap deck. It's a real project, built by one person, solving real problems — starting with his own.</p>
+  </header>
+
+  <!-- FOUNDER -->
+  <section class="founder">
+    <div class="wrap">
+      <div class="founder-inner">
+
+        <div class="founder-left fade-up">
+          <div class="founder-avatar">R</div>
+          <div class="founder-name">Robert Holgersson</div>
+          <div class="founder-title">Founder, FlowForge AI</div>
+          <div class="founder-links">
+            <a href="https://x.com/RobbanA16805" target="_blank" class="founder-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              @RobbanA16805 on X
+            </a>
+            <a href="mailto:robban@flowforgeai.app" class="founder-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              robban@flowforgeai.app
+            </a>
+            <a href="https://tiktok.com/@flowforgeai.app" target="_blank" class="founder-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.68V17c0 .86-.02 1.2-.4 1.53-.35.3-.92.45-1.72.45-.5 0-1-.1-1.42-.33-.6-.3-1-.93-1-1.66 0-.67.4-1.28 1-1.6.43-.24 1.12-.35 2-.32V12.5c-2.43 0-4.34.6-5.63 1.83-1.28 1.22-1.92 2.92-1.92 5.1s.64 3.88 1.92 5.1c1.28 1.22 3.2 1.83 5.72 1.83 2.53 0 4.45-.6 5.73-1.83 1.28-1.22 1.92-2.92 1.92-5.1V7.12C20.1 8.12 21.6 8.8 23.33 8.8v-2.5c-1.5 0-2.8-.5-3.83-1.37-1.1-.92-1.87-2.35-1.87-4.25H12.53z"/></svg>
+              TikTok
+            </a>
+          </div>
+        </div>
+
+        <div class="founder-right">
+
+          <div class="founder-block fade-up">
+            <span class="founder-block-label">The background</span>
+            <p>My name is Robert — most people call me Robban. I've always been drawn to computers, code, and technology. When AI started taking off for real, I was already deep in it — testing tools, experimenting, and helping people around me get started with things like ChatGPT, Gemini, Suno, Dall-E and more.</p>
+          </div>
+
+          <div class="founder-block fade-up">
+            <span class="founder-block-label">Where this started</span>
+            <p>FlowForge AI didn't start as a business idea. It started as a personal project — <strong>building automations and tools to make my own everyday life easier.</strong> When something worked well for me, I kept it. Over time I had a small collection of tools I actually used and relied on.</p>
+            <div class="pull-quote">
+              <p>"I realized most people didn't have the knowledge — or the desire — to build this kind of thing themselves. So I thought: why not offer what I already use to others?"</p>
+            </div>
+          </div>
+
+          <div class="founder-block fade-up">
+            <span class="founder-block-label">What FlowForge AI is today</span>
+            <p>It's a small, serious product business. Not a billion-dollar startup. Not a faceless tech company. Just <strong>real tools, built by a real person, for people who want to save time and work smarter</strong> — without having to become AI engineers to do it.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="mission">
+    <div class="wrap">
+      <div class="section-label fade-up">What we stand for</div>
+      <div class="mission-inner">
+
+        <div class="mission-card fade-up">
+          <span class="mission-icon">🎯</span>
+          <h3>AI that works for you — not the other way around</h3>
+          <p>Too many AI tools require you to adapt to them. FlowForge AI builds tools that fit into how you already work. The goal is always the same: less time on repetitive tasks, more time on the things that actually matter.</p>
+        </div>
+
+        <div class="mission-card fade-up">
+          <span class="mission-icon">🔓</span>
+          <h3>Accessible to everyone</h3>
+          <p>You shouldn't need a developer or a technical background to benefit from AI automation. FlowForge AI makes these tools approachable — for solopreneurs, small business owners, and anyone who wants to work smarter.</p>
+        </div>
+
+        <div class="mission-card fade-up">
+          <span class="mission-icon">🤝</span>
+          <h3>Honest about what it is</h3>
+          <p>FlowForge AI is a bootstrapped side project growing into a real product business. No hype, no overpromising. Just tools that earn back their cost and do what they say they do.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="wrap">
+      <div class="cta-inner fade-up">
+        <h2>Want to try the first tool?</h2>
+        <p>ForgeSocial is live — an AI social media toolkit that turns one idea into a week of content.</p>
+        <div class="cta-actions">
+          <a href="/forgesocial/" class="btn-primary">See ForgeSocial</a>
+          <a href="mailto:robban@flowforgeai.app" class="btn-secondary">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-logo"><img src="../img/logo.png" alt="FlowForge AI"></div>
+        <p class="footer-copy">© 2026 FlowForge AI. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="mailto:robban@flowforgeai.app">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            robban@flowforgeai.app
+          </a>
+          <a href="https://x.com/RobbanA16805" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X
+          </a>
+          <a href="https://tiktok.com/@flowforgeai.app" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.68V17c0 .86-.02 1.2-.4 1.53-.35.3-.92.45-1.72.45-.5 0-1-.1-1.42-.33-.6-.3-1-.93-1-1.66 0-.67.4-1.68 1.92-5.1V7.12C20.1 8.12 21.6 8.8 23.33 8.8v-2.5c-1.5 0-2.8-.5-3.83-1.37-1.1-.92-1.87-2.35-1.87-4.25H12.53z"/></svg>
+            TikTok
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fade-up').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) el.classList.add('visible');
+      });
+    });
+  </script>
+</body>
+</html>
