@@ -1,19 +1,4 @@
 (function () {
-  // ─── GOOGLE ANALYTICS 4 ───
-  // Ersätt G-XXXXXXXXXX med ditt riktiga Measurement ID från Google Analytics
-  const GA_ID = 'G-LV74LVZXJP';
-  if (GA_ID !== 'G-XXXXXXXXXX') {
-    const s1 = document.createElement('script');
-    s1.async = true;
-    s1.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
-    document.head.appendChild(s1);
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', GA_ID);
-  }
-
   // Detect depth from root to set correct relative paths
   const path = window.location.pathname;
   const depth = (path.match(/\//g) || []).length - 1;
