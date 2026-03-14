@@ -493,6 +493,72 @@
     }
     .cta-inner .hero-actions { position: relative; z-index: 1; }
 
+    /* ─── EMAIL SIGNUP ─── */
+    .email-signup { padding: 100px 0; }
+    .email-inner {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .email-inner h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .email-inner p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 36px;
+    }
+    .signup-form {
+      display: flex;
+      gap: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .signup-form input {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 14px 24px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .signup-form input:focus { border-color: var(--accent); }
+    .signup-form input::placeholder { color: var(--text-dim); }
+    .signup-form button {
+      background: var(--gradient);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+    .signup-form button:hover { opacity: 0.9; transform: translateY(-1px); }
+    .signup-form button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .signup-status {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      min-height: 1.2em;
+    }
+    .signup-status.success { color: #4ade80; }
+    .signup-status.error { color: #f87171; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* ─── FOOTER ─── */
     footer {
       border-top: 1px solid var(--border);
@@ -697,6 +763,25 @@
     </div>
   </section>
 
+  <!-- EMAIL SIGNUP -->
+  <section class="email-signup">
+    <div class="wrap">
+      <div class="email-inner fade-up">
+        <div class="section-label">Stay in the loop</div>
+        <h2>Get new tools before anyone else</h2>
+        <p>No spam. Just product launches, automation tips, and early access when new tools drop.</p>
+        <form class="signup-form" id="signupForm">
+          <input type="email" id="signupEmail" placeholder="Your email address" required autocomplete="email">
+          <button type="submit" id="signupBtn">
+            <span id="btnText">Subscribe</span>
+            <svg id="btnSpinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+          </button>
+        </form>
+        <p class="signup-status" id="signupStatus"></p>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div class="wrap">
@@ -735,6 +820,47 @@
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight) el.classList.add('visible');
       });
+    });
+
+    // Email signup via n8n webhook
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('signupEmail').value.trim();
+      const btn = document.getElementById('signupBtn');
+      const btnText = document.getElementById('btnText');
+      const spinner = document.getElementById('btnSpinner');
+      const status = document.getElementById('signupStatus');
+
+      btn.disabled = true;
+      btnText.textContent = 'Subscribing...';
+      spinner.style.display = 'inline';
+      status.textContent = '';
+      status.className = 'signup-status';
+
+      try {
+        const res = await fetch('https://api.flowforgeai.app/webhook/email-signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          status.textContent = "You're in! We'll be in touch.";
+          status.classList.add('success');
+          document.getElementById('signupEmail').value = '';
+        } else {
+          throw new Error(data.message || 'Something went wrong');
+        }
+      } catch (err) {
+        status.textContent = 'Something went wrong. Try again or email robban@flowforgeai.app';
+        status.classList.add('error');
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Subscribe';
+        spinner.style.display = 'none';
+      }
     });
   </script>
 </body>
